@@ -17,6 +17,7 @@ struct ImageViewerApp: App {
             CommandMenu("Image") {
                 Button("Rotate Clockwise") { ViewerModel.shared.rotateClockwise() }
                     .keyboardShortcut("r")
+                Button("Set as Desktop Picture") { ViewerModel.shared.setAsWallpaper() }
                 Divider()
                 Button("Zoom In") { ViewerModel.shared.zoomIn() }
                     .keyboardShortcut("=")

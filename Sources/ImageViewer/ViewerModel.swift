@@ -116,6 +116,19 @@ final class ViewerModel: ObservableObject {
         updateDisplay()
     }
 
+    /// Sets the original file as the desktop picture on every screen.
+    /// Rotation is a display-only change, so the wallpaper uses the file as saved.
+    func setAsWallpaper() {
+        guard let url = currentURL else { return }
+        do {
+            for screen in NSScreen.screens {
+                try NSWorkspace.shared.setDesktopImageURL(url, for: screen, options: [:])
+            }
+        } catch {
+            NSAlert(error: error).runModal()
+        }
+    }
+
     // MARK: - Private
 
     private func load() {

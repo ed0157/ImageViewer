@@ -125,6 +125,11 @@ struct ContentView: View {
                 ShareLink(item: url)
             }
 
+            Button { model.setAsWallpaper() } label: {
+                Label("Set as Wallpaper", systemImage: "photo.on.rectangle")
+            }
+            .disabled(model.currentURL == nil)
+
             Button { showInfo.toggle() } label: {
                 Label("Info", systemImage: "info.circle")
             }
