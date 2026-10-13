@@ -1,4 +1,6 @@
-# Image Viewer
+<h1 align="center">
+  <img src="docs/readme-banner.png" alt="Image Viewer: open one image, explore the folder" width="100%">
+</h1>
 
 A small macOS image viewer modeled on Preview. Open one image and step through the rest of its folder with the keyboard.
 
@@ -116,4 +118,4 @@ Releases are ad-hoc signed only. Notarizing them needs a paid Apple Developer ac
 
 The source code and documentation are released under the MIT licence. See [LICENSE](LICENSE).
 
-The app icon (`Resources/AppIcon.png` and `Resources/AppIcon.icns`) is © 2026 ed0157, all rights reserved. It is **not** covered by the MIT licence (see [NOTICE.md](NOTICE.md)). Please do not reuse it without permission.
+The app icon and the README banner (`Resources/AppIcon.png`, `Resources/AppIcon.icns` and `docs/readme-banner.png`) are © 2026 ed0157, all rights reserved. They are **not** covered by the MIT licence (see [NOTICE.md](NOTICE.md)). Please do not reuse them without permission.
