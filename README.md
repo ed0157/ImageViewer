@@ -98,8 +98,9 @@ To rebuild the icon from `Resources/AppIcon.png`, run `scripts/make-icon.sh`.
 
 ## Releases
 
-GitHub builds the installer and publishes it as a release. Either:
+GitHub builds the installer and publishes it as a release. Any of these starts it:
 
+- change the number in the `VERSION` file (for example to `1.0.1`) and merge it into `main`;
 - open the **Actions** tab, choose **Release**, click **Run workflow**, and type a version such as `1.0.0`; or
 - push a tag:
 
