@@ -1,4 +1,5 @@
 # Layout of the installer window, read by dmgbuild (see scripts/package.sh).
+# Icon positions must match the arrow drawn in scripts/make-dmg-background.py.
 import os
 
 app = defines.get("app", "build/ImageViewer.app")  # noqa: F821  (`defines` is provided by dmgbuild)
@@ -8,6 +9,7 @@ format = "UDZO"
 files = [app]
 symlinks = {"Applications": "/Applications"}
 icon = "Resources/AppIcon.icns"
+background = "Resources/dmg-background.tiff"
 
 window_rect = ((200, 140), (660, 462))  # 462 = 430 of picture + title bar
 default_view = "icon-view"
