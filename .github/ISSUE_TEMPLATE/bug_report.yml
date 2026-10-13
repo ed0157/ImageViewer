@@ -1,0 +1,32 @@
+name: Bug report
+description: Something in Image Viewer is not working as expected
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Do not attach private or personal photos.** Use made-up or public-domain images.
+        For a security problem, do not use this form. See SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Image Viewer version
+      placeholder: "e.g. 1.0.0 (shown in the release you downloaded)"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version and Mac type
+      placeholder: "e.g. macOS 26.0, Apple Silicon"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce

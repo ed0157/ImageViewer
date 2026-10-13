@@ -1,0 +1,62 @@
+name: Release
+
+# Maintainer-only: builds the installer and publishes it as a GitHub release. Only people with write
+# access to this repository can run it or push a tag. Start it either way:
+#   - Actions tab -> Release -> Run workflow, and type a version such as 1.0.0
+#   - or push a tag like v1.0.0
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, for example 1.0.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    # Only release from the main branch or from a version tag, never from another branch.
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Do not leave the write-capable token on disk for the build tools to read.
+          persist-credentials: false
+
+      - name: Work out version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [ -n "$INPUT_VERSION" ]; then
+            VERSION="${INPUT_VERSION#v}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          # Match the whole value (it must be a single line) before it is used anywhere else.
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
+            echo "Version is not like 1.2.3" >&2
+            exit 1
+          fi
+          printf 'VERSION=%s\n' "$VERSION" >> "$GITHUB_ENV"
+
+      - name: Build universal app
+        run: scripts/build.sh
+
+      - name: Package installer
+        run: scripts/package.sh
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "v$VERSION" \
+            "build/ImageViewer-$VERSION.dmg" \
+            "build/ImageViewer-$VERSION.zip" \
+            "build/ImageViewer-$VERSION.sha256" \
+            --target "$GITHUB_SHA" \
+            --title "ImageViewer $VERSION" \
+            --generate-notes

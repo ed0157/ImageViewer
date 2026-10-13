@@ -1,4 +1,13 @@
-.build/
 build/
-.claude/
+.build/
+*.app
+*.dmg
+*.zip
+*.sha256
 .DS_Store
+.env
+.claude/
+.xgrep/
+*.pyc
+__pycache__/
+venv/

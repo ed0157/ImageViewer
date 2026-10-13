@@ -1,0 +1,12 @@
+version: 2
+updates:
+  # Keeps the pinned GitHub Actions up to date. Updates arrive as pull requests to review.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  # Watches the pinned, hash-checked build tools in scripts/requirements-dmg.txt.
+  - package-ecosystem: "pip"
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
