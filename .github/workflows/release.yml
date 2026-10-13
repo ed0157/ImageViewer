@@ -1,11 +1,14 @@
 name: Release
 
 # Maintainer-only: builds the installer and publishes it as a GitHub release. Only people with write
-# access to this repository can run it or push a tag. Start it either way:
+# access to this repository can run it or push a tag. Start it any of three ways:
+#   - merge a change to the VERSION file into main (for example 1.0.1)
 #   - Actions tab -> Release -> Run workflow, and type a version such as 1.0.0
 #   - or push a tag like v1.0.0
 on:
   push:
+    branches: [main]
+    paths: [VERSION]
     tags: ["v*"]
   workflow_dispatch:
     inputs:
@@ -30,11 +33,14 @@ jobs:
       - name: Work out version
         env:
           INPUT_VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           if [ -n "$INPUT_VERSION" ]; then
             VERSION="${INPUT_VERSION#v}"
-          else
+          elif [ "$GITHUB_REF_TYPE" = "tag" ]; then
             VERSION="${GITHUB_REF_NAME#v}"
+          else
+            VERSION="$(head -n 1 VERSION | tr -d '[:space:]')"
           fi
           # Match the whole value (it must be a single line) before it is used anywhere else.
           if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
@@ -42,14 +48,22 @@ jobs:
             exit 1
           fi
           printf 'VERSION=%s\n' "$VERSION" >> "$GITHUB_ENV"
+          # A change to VERSION that does not bump it must not try to publish the same release twice.
+          if gh release view "v$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release v$VERSION already exists, nothing to do."
+            echo "SKIP=1" >> "$GITHUB_ENV"
+          fi
 
       - name: Build universal app
+        if: env.SKIP != '1'
         run: scripts/build.sh
 
       - name: Package installer
+        if: env.SKIP != '1'
         run: scripts/package.sh
 
       - name: Publish release
+        if: env.SKIP != '1'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
