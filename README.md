@@ -56,3 +56,7 @@ iconutil -c icns build/AppIcon.iconset -o Resources/AppIcon.icns
 - No pinch-to-zoom gesture yet.
 - No editing, cropping or printing.
 - Large folders are listed in full when you open an image.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
